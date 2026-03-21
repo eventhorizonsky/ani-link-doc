@@ -3,7 +3,7 @@ import mdItCustomAttrs from "markdown-it-custom-attrs";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   srcDir: "docs",
-  base: "/AniLinkDoc/",
+  base: "/ani-link-doc/",
 
   title: "AniLinkServer",
   description: "一个为弹幕站设计的媒体管理服务",
@@ -23,7 +23,7 @@ export default defineConfig({
         href: "https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css",
       },
     ],
-    ["link", { rel: "icon", href: "/AniLinkDoc/favicon.ico" }],
+    ["link", { rel: "icon", href: "/ani-link-doc/favicon.ico" }],
     [
       "script",
       {
