@@ -1,0 +1,176 @@
+# 快速启动一个可用的追番服务（docker-compose）
+
+​	本文将引导用户构建一个基础的AniLinkService的docker容器，并通过简单的配置介绍，实现一个基础可用的追番服务，在阅读文档前，可以先通过以下事项确认本服务是否能满足你的需求：
+
+
+
+1、你有一台可以持续运行的NAS或家用服务器
+
+> 如果你本身只有一台电脑或手机，那弹弹官方的应用程序应该更加适合你：[链接地址](https://www.dandanplay.com/)
+
+2、你的服务器支持docker，且知道如何拉取创建docker容器
+
+> 本文将以极空间的可视化面板来演示docker-compose部署pgsql+anilink
+
+3、你的机器能访问`ghcr.io`
+
+> 这是github的容器镜像，如果无法拉取，你可能需要一些魔法手段
+
+4、你申请到了弹弹开放平台的AppId和AppSecret
+
+> 目前官方的开发者中心还没搭建完成，见[申请指引](https://doc.dandanplay.com/open/#_3-%E7%94%B3%E8%AF%B7-appid-%E5%92%8C-appsecret)，你可能需要发送邮件来获取，这很重要，后续的步骤依赖申请的AppId 和 AppSecret
+
+## 1. 配置docker-compose
+
+进入compose的编排页面，粘贴以下compose内容
+
+![image-20260321174921148](/quick-start-compose/image-20260321174921148.jpg)
+
+
+
+```yaml
+services:
+  postgres:
+    image: postgres:16
+    container_name: anilink-postgres
+    environment:
+      POSTGRES_DB: anilink
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      TZ: Asia/Shanghai
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d anilink"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  anilink:
+    image: ghcr.io/eventhorizonsky/anilinkserver:latest
+    container_name: anilink
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8085:8081"
+    environment:
+      DB_PROFILE: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: anilink
+      DB_USER: postgres
+      DB_PASS: postgres
+      TZ: Asia/Shanghai
+    volumes:
+      - ./config:/data
+      - ./media:/media/anime
+    restart: unless-stopped
+volumes:
+  pg_data:
+    driver: local
+```
+
+注意，以上内容中
+
+1、ports的8085需换成你当前服务器未被占用的端口
+
+2、volumes下挂载的`./config`和`./media`，需要使用查询路径功能来使用指定的NAS文件夹
+
+![image-20260321175116479](/quick-start-compose/image-20260321175116479.jpg)
+
+- `/data` 用于持久化一些缓存或临时文件（字幕、临时下载目录等）
+- `/media/anime`是其挂载到容器内的媒体路径，你可以用`/media/anime1`、`/media/anime2`之类你任意想用的路径，但是记得别和系统要用的路径重合
+- `POSTGRES_USER`和`POSTGRES_PASSWORD`可以进行修改，但是也记得改anilink下的对应环境变量
+
+
+
+## 2. 初始化引导
+
+1. 浏览器打开 `http://<你的主机IP>:8085`（如果你修改了上面的端口，则访问你修改后的），预期看到的引导页面如下：
+
+   ![image-20260321180552596](/quick-start-compose/image-20260321180552596.jpg)
+
+2.如无异常，直接点击下一步，进行站点标题、描述、管理员账号和弹弹开放平台的配置
+
+> 弹弹的[AppId 和 AppSecret](https://doc.dandanplay.com/open/#_3-申请-appid-和-appsecret)是必需的，不然程序基础功能将无法使用
+
+![image-20260316201446174](/quick-start-ssh/image-20260316201446174.jpg)
+
+3.配置媒体库，如果你是按照此指引的命令构建的容器，那么你需要选中`/media/anime`
+
+![image-20260316201702111](/quick-start-ssh/image-20260316201702111.jpg)
+
+4.直接点击完成安装即可
+
+![image-20260316201737725](/quick-start-ssh/image-20260316201737725.jpg)
+
+正常情况下，首页的新番时间表应当正常展示，如果显示数据异常，则可能是你提供的[AppId 和 AppSecret](https://doc.dandanplay.com/open/#_3-申请-appid-和-appsecret)有问题
+
+![image-20260316201900329](/quick-start-ssh/image-20260316201900329.jpg)
+
+## 3. 配置自动下载
+
+> 如果你的媒体库文件夹本身已经有了你需要的视频文件，可以跳过这一节
+
+点击右上角头像，登录你上一节中配置的管理员账号
+
+![image-20260316202122662](/quick-start-ssh/image-20260316202122662.jpg)
+
+登录后，再次点击头像，进入后台管理
+
+![image-20260316202210898](/quick-start-ssh/image-20260316202210898.jpg)
+
+进入RSS订阅菜单，新增一个RSS订阅，此处以ANI组的acg.rip的rss订阅为示例，你也可以换成mikan的订阅地址
+
+```
+https://acg.rip/team/173.xml
+```
+
+![image-20260316202351270](/quick-start-ssh/image-20260316202351270.jpg)
+
+如果你的服务器本身无法访问acg.rip等rss订阅地址，你可以通过以下方式来配置http代理
+
+![image-20260316202539570](/quick-start-ssh/image-20260316202539570.jpg)
+
+点击立即检查，它将启动一次RSS订阅检索，将最新的30条ANI组的番剧下载到你的媒体库中，并自动完成匹配
+
+![image-20260316202624309](/quick-start-ssh/image-20260316202624309.jpg)
+
+![image-20260316202711884](/quick-start-ssh/image-20260316202711884.jpg)
+
+![image-20260316202737346](/quick-start-ssh/image-20260316202737346.jpg)
+
+![image-20260316203228609](/quick-start-ssh/image-20260316203228609.jpg)
+
+回到首页，点击发现，应当能看到刚刚匹配成功的番剧
+
+![image-20260316203303408](/quick-start-ssh/image-20260316203303408.jpg)
+
+
+
+## 4.番剧详情与播放
+
+匹配成功的剧集将会亮起，点击后会自动加载弹幕
+
+![image-20260316203422059](/quick-start-ssh/image-20260316203422059.jpg)
+
+评论区可以查看番剧对应的bgm.tv的吐槽
+
+![image-20260316203456663](/quick-start-ssh/image-20260316203456663.jpg)
+
+点击追番后，番剧更新将会在消息中心提示，并添加到追番列表
+
+![image-20260316203536620](/quick-start-ssh/image-20260316203536620.jpg)
+
+![image-20260316203556961](/quick-start-ssh/image-20260316203556961.jpg)
+
+![image-20260316203628935](/quick-start-ssh/image-20260316203628935.jpg)
+
+## 5. 故障排查
+
+- 无法访问页面：检查端口映射 `-p 8081:8081` 与服务器防火墙
+- 扫描不到视频：确认媒体目录已挂载且安装向导中填写的是容器内路径
+- 启动失败：先看日志 `docker logs anilink`
+
