@@ -16,9 +16,9 @@
 
 > 这是github的容器镜像，如果无法拉取，你可能需要一些魔法手段
 
-4、你申请到了弹弹开放平台的AppId和AppSecret
+4、你已经拿到了弹弹开放平台的AppId和AppSecret
 
-> 目前官方的开发者中心还没搭建完成，见[申请指引](https://doc.dandanplay.com/open/#_3-%E7%94%B3%E8%AF%B7-appid-%E5%92%8C-appsecret)，你可能需要发送邮件来获取，这很重要，后续的步骤依赖申请的AppId 和 AppSecret
+> 如果你还没有官方AppId/AppSecret，可以先参考本项目的[下游代理服务介绍](./ani-link-proxy.md)。
 
 ## 1. 拉取镜像
 
@@ -63,7 +63,7 @@ docker run -d \
 
 2.如无异常，直接点击下一步，进行站点标题、描述、管理员账号和弹弹开放平台的配置
 
-> 弹弹的[AppId 和 AppSecret](https://doc.dandanplay.com/open/#_3-申请-appid-和-appsecret)是必需的，不然程序基础功能将无法使用
+> 弹弹的 AppId 和 AppSecret 是必需的，不然程序基础功能将无法使用。你可以先阅读本项目的[下游代理服务介绍](./ani-link-proxy.md)来获取示例服务和说明。该公益服务仅作示例，你也可以使用任何符合弹弹play API规范的服务；官方 API 可用时仍建议优先使用。
 
 ![image-20260316201446174](/quick-start-ssh/image-20260316201446174.jpg)
 
@@ -75,7 +75,7 @@ docker run -d \
 
 ![image-20260316201737725](/quick-start-ssh/image-20260316201737725.jpg)
 
-正常情况下，首页的新番时间表应当正常展示，如果显示数据异常，则可能是你提供的[AppId 和 AppSecret](https://doc.dandanplay.com/open/#_3-申请-appid-和-appsecret)有问题
+正常情况下，首页的新番时间表应当正常展示，如果显示数据异常，则可能是你提供的 AppId 和 AppSecret 有问题；参考本项目的[下游代理服务介绍](./ani-link-proxy.md)或者官方 API 指引来检查。
 
 ![image-20260316201900329](/quick-start-ssh/image-20260316201900329.jpg)
 

@@ -66,7 +66,7 @@ export default defineConfig({
           { text: "概览", link: "/dev-guide/overview" },
           { text: "后端开发", link: "/dev-guide/backend" },
           { text: "前端开发", link: "/dev-guide/frontend" },
-          { text: "数据库与Liquibase", link: "/dev-guide/database" },
+          { text: "数据库与Liquibase", link: "/dev-guide/database" }
         ],
       },
     ],
@@ -83,6 +83,7 @@ export default defineConfig({
           { text: "媒体库管理", link: "/user-guide/media-library-management" },
           { text: "字幕管理", link: "/user-guide/subtitle-management" },
           { text: "资源搜索", link: "/user-guide/resource-search" },
+          { text: "MCP接入", link: "/user-guide/mcp" },
           { text: "RSS订阅", link: "/user-guide/rss-subscription" },
           { text: "下载管理", link: "/user-guide/download-management" },
           { text: "bangumi绑定", link: "/user-guide/bangumi-binding" },
@@ -113,8 +114,12 @@ export default defineConfig({
               text: "通过可视化界面来启动服务（以极空间为例）+PGSQL",
               link: "/quick-start-compose",
             },
+           
           ],
-        },
+        },{
+          text: "弹弹play AppId / AppSecret",
+          items: [ { text: "下游代理服务", link: "/ani-link-proxy" }]
+        }
       ],
     },
     logo: "/logo.svg",
