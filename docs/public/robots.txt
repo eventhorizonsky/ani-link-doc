@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /ani-link-doc/
+
+Sitemap: https://eventhorizonsky.github.io/ani-link-doc/sitemap.xml
