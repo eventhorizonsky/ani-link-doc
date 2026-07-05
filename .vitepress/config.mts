@@ -66,7 +66,8 @@ export default defineConfig({
           { text: "概览", link: "/dev-guide/overview" },
           { text: "后端开发", link: "/dev-guide/backend" },
           { text: "前端开发", link: "/dev-guide/frontend" },
-          { text: "数据库与Liquibase", link: "/dev-guide/database" }
+          { text: "数据库与Liquibase", link: "/dev-guide/database" },
+          { text: "API 缓存机制", link: "/dev-guide/cache" }
         ],
       },
     ],
@@ -99,6 +100,7 @@ export default defineConfig({
             { text: "后端开发", link: "/dev-guide/backend" },
             { text: "前端开发", link: "/dev-guide/frontend" },
             { text: "数据库与Liquibase", link: "/dev-guide/database" },
+            { text: "API 缓存机制", link: "/dev-guide/cache" },
           ],
         },
       ],
