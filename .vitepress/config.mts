@@ -1,21 +1,57 @@
 import { defineConfig } from "vitepress";
 import mdItCustomAttrs from "markdown-it-custom-attrs";
+
+const SITE_URL = "https://eventhorizonsky.github.io/ani-link-doc";
+const SITE_TITLE = "AniLinkService — 自托管动漫媒体库 · NAS 追番弹幕管理";
+const SITE_DESCRIPTION =
+  "基于弹弹play开放平台的自动化动漫媒体管理中心。支持本地文件扫描、弹幕匹配、Web播放、RSS自动下载、Bangumi追番联动，可部署在NAS/家用服务器/云主机上。开源、自托管、Docker一键启动。";
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   srcDir: "docs",
   base: "/ani-link-doc/",
 
-  title: "AniLinkServer",
-  description: "一个为弹幕站设计的媒体管理服务",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+
+  // 生成 sitemap.xml，帮助搜索引擎发现所有页面
+  sitemap: {
+    hostname: SITE_URL,
+  },
+
   markdown: {
     config: (md) => {
-      // use more markdown-it plugins!
       md.use(mdItCustomAttrs, "image", {
         "data-fancybox": "gallery",
       });
     },
   },
+
+  // 全局 <head> 注入：搜索引擎 meta + Open Graph + Twitter Card
   head: [
+    // 搜索引擎
+    ["meta", { name: "robots", content: "index, follow" }],
+    ["meta", { name: "author", content: "eventhorizonsky" }],
+    ["link", { rel: "canonical", href: SITE_URL }],
+
+    // Open Graph（Discord / Telegram / Slack 等展开预览）
+    ["meta", { property: "og:type", content: "website" }],
+    ["meta", { property: "og:url", content: SITE_URL }],
+    ["meta", { property: "og:title", content: SITE_TITLE }],
+    ["meta", { property: "og:description", content: SITE_DESCRIPTION }],
+    ["meta", { property: "og:image", content: `${SITE_URL}/logo.png` }],
+    ["meta", { property: "og:image:width", content: "256" }],
+    ["meta", { property: "og:image:height", content: "256" }],
+    ["meta", { property: "og:site_name", content: "AniLinkService" }],
+    ["meta", { property: "og:locale", content: "zh_CN" }],
+
+    // Twitter Card
+    ["meta", { name: "twitter:card", content: "summary" }],
+    ["meta", { name: "twitter:title", content: SITE_TITLE }],
+    ["meta", { name: "twitter:description", content: SITE_DESCRIPTION }],
+    ["meta", { name: "twitter:image", content: `${SITE_URL}/logo.png` }],
+
+    // Fancybox
     [
       "link",
       {
@@ -41,6 +77,17 @@ export default defineConfig({
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    // 搜索设置
+    search: {
+      provider: "local",
+    },
+
+    // 最后更新时间（基于 Git，提升"内容新鲜度"信号）
+    lastUpdated: {
+      text: "最后更新",
+      formatOptions: { dateStyle: "short", timeStyle: "short" },
+    },
+
     nav: [
       { text: "首页", link: "/" },
       { text: "快速开始", link: "/quick-start-ssh" },

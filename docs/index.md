@@ -3,9 +3,9 @@
 layout: home
 
 hero:
-  name: "AniLinkServer"
-  text: "一个为弹幕站设计的媒体管理服务"
-  tagline: 基于弹弹play开放平台，媒体库扫描、番剧匹配、弹幕播放与后台管理
+  name: "AniLinkService"
+  text: "自托管动漫媒体库 · NAS 追番弹幕管理"
+  tagline: 基于弹弹play开放平台的自动化动漫管理中心。文件扫描、弹幕匹配、Web播放、RSS自动下载、Bangumi追番联动，Docker一键部署。
   image:
     src: /logo.png
     alt: AniLinkServer
