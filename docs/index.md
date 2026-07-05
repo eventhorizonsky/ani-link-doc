@@ -1,6 +1,7 @@
 ---
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
+title: "动漫媒体管理中心 - 自托管NAS追番弹幕管理"
 
 hero:
   name: "AniLinkService"

@@ -172,7 +172,7 @@ export default defineConfig({
         }
       ],
     },
-    logo: "/logo.svg",
+    logo: { src: "/logo.svg", alt: "AniLinkService Logo" },
     socialLinks: [
       {
         icon: "github",
