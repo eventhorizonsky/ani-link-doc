@@ -2,7 +2,7 @@ import { defineConfig } from "vitepress";
 import mdItCustomAttrs from "markdown-it-custom-attrs";
 
 const SITE_URL = "https://eventhorizonsky.github.io/ani-link-doc";
-const SITE_TITLE = "AniLinkService — 自托管动漫媒体库 · NAS 追番弹幕管理";
+const SITE_TITLE = "AniLinkService";
 const SITE_DESCRIPTION =
   "基于弹弹play开放平台的自动化动漫媒体管理中心。支持本地文件扫描、弹幕匹配、Web播放、RSS自动下载、Bangumi追番联动，可部署在NAS/家用服务器/云主机上。开源、自托管、Docker一键启动。";
 
