@@ -15,8 +15,9 @@ export default defineConfig({
   description: SITE_DESCRIPTION,
 
   // 生成 sitemap.xml，帮助搜索引擎发现所有页面
+  // 注意：hostname 只需填写 origin，base 路径会自动拼接
   sitemap: {
-    hostname: SITE_URL,
+    hostname: "https://eventhorizonsky.github.io",
   },
 
   markdown: {
